@@ -1,0 +1,115 @@
+// COMP2521 24T3 - Assignment 1
+// analysis of the time complexity of some functions
+// Written by Melina Salardini (z5393518)
+// on 20/10/2024
+
+========================================================================
+                          Complexity Analysis
+========================================================================
+
+NOTE:
+- Your time complexities should be in big-O notation.
+- For MsetUnion, MsetIntersection, MsetIncluded and MsetEquals, your
+  time complexities should be in terms of n and m, where n is the size
+  of the first multiset (s1) and m is the size of the second multiset
+  (s2).
+- For MsetMostCommon, your time complexity should be in terms of n and k,
+  where n is the number of distinct elements in the given multiset and k
+  is the given value of k.
+
+
+------------------
+    MsetUnion
+------------------
+
+Worst case time complexity: O(n log n + m log(n + m))
+
+Explanation: the MsetUnion creates a new multiset (which is O(1)). Then it forms
+  the new multiset by traversing both s1 and s2 tree using 'addUnionTree'.
+  for each node it calls the 'findNode' function, which takes O(log n) time for
+  each search (where n is the size of the new multiset at that point).
+  If the element is not found, it insert the node using 'MsetInsertMany' function,
+  which also takes O(log n).
+  Each tree is fully traversed once so the total time complexity for processing s1
+  is O(n log n).
+  similarly for s2, it's O(m log(m + n)) which m is the size of s2 and (m + n) is
+  the new size of the new multiset cause it increases
+  Therefor, the total time complexity is:
+                          O(n log n + m log(n + m))
+
+
+
+------------------
+ MsetIntersection
+------------------
+
+Worst case time complexity: O(n log m)
+
+Explanation: MsetIntersection builds a new multiset by finding the intersection
+  of the two trees, s1 and s2. it uses 'addIntersectionTree' to traverse all nodes
+  in s1, and for each node, it searches s2 using 'findNode', which takes O(log(m))
+  for each operation in a balance tree of size m.
+  If the matching node was found 'MsetInsertMany' is called to insert the node,
+  which also takes O(log n).
+  since t1 is fully traversed the time complexity is:
+                                O(n log m)
+
+
+
+------------------
+   MsetIncluded
+------------------
+
+Worst case time complexity: O(n log m)
+
+Explanation: The function 'MsetIncluded' calls 'treeIncluded' which checks if all
+  the elements in t1 is present in t2 with at least the same count.
+  For each node in t1, it searches for the same node in the t2 using 'findNode',
+  which has the time complexity of O(log m) in a balance tree of size m.
+  since 'treeIncluded' recursively process all the nodes in t1, the overall
+  time complexity is:
+                            O(n log m)
+
+
+
+------------------
+    MsetEquals
+------------------
+
+Worst case time complexity: O(n log m)
+
+Explanation: 'MsetEquals' first checks if the size and total count of the multiset
+  s1 and s2 are the same. These checks are done in a constant time
+  The function calls 'treeEquals', which compares every node in t1 with the 
+  corresponding node in t1. For each node in t1, it uses 'findNode' on t2, which
+  takes O(log m) time in a balance tree of size m.
+  since 'treeEquals' process all the nodes in t1, the overall time complexity is:
+                                 O(n log m) 
+
+
+
+------------------
+  MsetMostCommon
+------------------
+
+Worst case time complexity: O(n log n)
+
+Explanation: allocating memory error checking and all are O(1). 
+  1) collecting items: the function 'collectItems' traverse the entire BST. The
+  operation visit every node once, so the time complexity for this step is O(n)
+  2) sorting the items: After collecting the items the fuction sorts the array
+  using qsort which has the time complexity of O(n log n)
+  3) selecting the top k items: The function then selects the top k items, which
+  takes O(k). Since k <= n it doesnt dominate the overall time complexity
+
+  Therefor, the total time complexity removing the smaller terms is:
+                            O(n log n)
+
+
+
+========================================================================
+               Design Documentation for Cursor Operations
+========================================================================
+
+If you completed the cursor operations, you must explain the design and
+implementation of your solution here.
